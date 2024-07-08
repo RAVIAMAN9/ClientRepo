@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import rkj.objLib.objLib.TrainServiceObject.Dto.Train;
 
-@FeignClient(url = "http://localhost:8080", name = "trainService")
+@FeignClient(name = "TRAIN-SERVICE")
 public interface TrainClient {
 
     @GetMapping("train/{trainNumber}")
