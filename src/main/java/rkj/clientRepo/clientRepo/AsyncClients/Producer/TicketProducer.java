@@ -1,9 +1,8 @@
-package rkj.clientRepo.clientRepo.RabbitMQClients.Producer;
+package rkj.clientRepo.clientRepo.AsyncClients.Producer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import rkj.objLib.objLib.AsynchronousObjects.RabbitMqObjects.TicketEvent;
 
