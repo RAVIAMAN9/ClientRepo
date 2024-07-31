@@ -1,8 +1,11 @@
 package rkj.clientRepo.clientRepo.AsyncClients.Producer;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.Message;
@@ -21,14 +24,18 @@ public class TrainStoppageProducer {
 
     private KafkaTemplate<String, TrainStoppage> kafkaTemplate;
 
-    public TrainStoppageProducer(NewTopic topicName,KafkaTemplate kafkaTemplate){
+    private ObjectMapper mapper = new ObjectMapper();
+
+    public TrainStoppageProducer(@Qualifier("trainStoppageTopic") NewTopic topicName, KafkaTemplate kafkaTemplate){
         this.topicName=topicName;
         this.kafkaTemplate=kafkaTemplate;
     }
 
-    public void sendMessage(TrainStoppage trainStoppage) {
-        Message<TrainStoppage> message = MessageBuilder
-                .withPayload(trainStoppage)
+    public void sendMessage(TrainStoppage trainStoppage) throws JsonProcessingException {
+        logger.info(String.format("Produce the message %s",trainStoppage));
+        String payload = mapper.writeValueAsString(trainStoppage);
+        Message<String> message = MessageBuilder
+                .withPayload(payload)
                 .setHeader(KafkaHeaders.TOPIC, topicName.name())
                 .build();
         kafkaTemplate.send(message);

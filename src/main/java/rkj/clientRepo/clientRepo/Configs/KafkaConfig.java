@@ -13,9 +13,15 @@ public class KafkaConfig {
     private String trainTopicName;
 
     @Bean
-    public NewTopic trainTopic(){
+    public NewTopic ticketTopic(){
         return TopicBuilder
-                .name("train-topic")
+                .name("ticketTopic")
+                .build();
+    }
+
+    @Bean
+    public NewTopic trainStoppageTopic(){
+        return TopicBuilder.name("trainStoppageTopic")
                 .build();
     }
 }
