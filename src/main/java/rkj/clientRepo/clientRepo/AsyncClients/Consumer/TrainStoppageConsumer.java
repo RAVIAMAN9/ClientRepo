@@ -1,6 +1,7 @@
 package rkj.clientRepo.clientRepo.AsyncClients.Consumer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.StreamReadFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,12 +29,11 @@ public class TrainStoppageConsumer {
 
     @KafkaListener(topics = "trainStoppageTopic",groupId = "train-group")
     public void consumeMessage(String message) throws JsonProcessingException {
+        mapper.enable(StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION.mappedFeature());
         logger.info(String.format("Consumed the message %s ",message));
         TrainStoppage trainStoppage = mapper.readValue(message,TrainStoppage.class);
         String stationCode = trainStoppage.getStoppageCode();
         Integer trainNumber = trainStoppage.getTrainNumber();
-//        String stationCode = trainStoppage.getStoppageCode();
-//        Integer trainNumber = trainStoppage.getTrainNumber();
         stationPersistence.updateTrainStoppage(stationCode, trainNumber);
         trainPersistance.updateStoppagesInTrain(stationCode, trainNumber);
     }
